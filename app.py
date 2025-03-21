@@ -1,27 +1,49 @@
 from flask import Flask, request, jsonify
-from flask_cors import CORS
+import pandas as pd
+from sklearn.feature_extraction.text import TfidfVectorizer
+from sklearn.metrics.pairwise import cosine_similarity
 
 app = Flask(__name__)
-CORS(app)  # Allow frontend to access backend
+
+# Sample job dataset
+jobs_data = pd.DataFrame({
+    "job_id": [1, 2, 3, 4, 5],
+    "title": ["Data Scientist", "Software Engineer", "AI Engineer", "Business Analyst", "Cybersecurity Analyst"],
+    "skills": [
+        "python, machine learning, data analysis",
+        "java, javascript, react, backend",
+        "deep learning, pytorch, tensorflow",
+        "sql, excel, data visualization",
+        "network security, penetration testing"
+    ]
+})
+
+# TF-IDF Vectorization
+vectorizer = TfidfVectorizer()
+job_vectors = vectorizer.fit_transform(jobs_data["skills"])
 
 @app.route('/recommend', methods=['POST'])
 def recommend_jobs():
-    data = request.get_json()
-    skills = data.get("skills", "")
-
-    # Dummy job recommendation based on skills
-    job_recommendations = {
-        "python": ["Python Developer", "Data Scientist"],
-        "machine learning": ["ML Engineer", "AI Researcher"],
-    }
-
-    recommended_jobs = []
-    for skill in skills.split(","):
-        skill = skill.strip().lower()
-        if skill in job_recommendations:
-            recommended_jobs.extend(job_recommendations[skill])
-
-    return jsonify({"jobs": list(set(recommended_jobs))})
+    try:
+        # Get user input
+        user_input = request.json.get("skills", "")
+        if not user_input:
+            return jsonify({"error": "Skills input is required"}), 400
+        
+        # Transform user input
+        user_vector = vectorizer.transform([user_input])
+        
+        # Calculate cosine similarity
+        similarities = cosine_similarity(user_vector, job_vectors).flatten()
+        
+        # Get top 3 job recommendations
+        top_indices = similarities.argsort()[-3:][::-1]
+        recommendations = jobs_data.iloc[top_indices][["job_id", "title"]].to_dict(orient="records")
+        
+        return jsonify({"recommendations": recommendations})
+    
+    except Exception as e:
+        return jsonify({"error": str(e)}), 500
 
 if __name__ == '__main__':
     app.run(debug=True)
