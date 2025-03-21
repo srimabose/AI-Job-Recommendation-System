@@ -2,12 +2,12 @@
 
 🚀 **AI-powered job recommendation system** that suggests suitable job roles based on user-inputted skills.  
 
----
+<br/>
 
 ## 📸 Project Screenshot
 ![Screenshot](img.png)
-
----
+<br/>
+<br/>
 
 ## 📌 Features  
 ✅ AI-based job recommendations  
@@ -15,7 +15,8 @@
 ✅ Responsive design (mobile & desktop)  
 ✅ Built using Flask (backend) and JavaScript (frontend)  
 
----
+<br/>
+<br/>
 
 ## 🛠️ Technologies Used  
 ### **Frontend:**  
@@ -27,7 +28,7 @@
 - Machine Learning (**Scikit-Learn, Pandas**)  
 - REST API for skill-based recommendations  
 
----
+<br/>
 
 ## 🚀 Installation & Setup  
 
