@@ -4,12 +4,8 @@
 
 ---
 
-## 📸 Project Screenshot  
-> **👉 Add a screenshot here**  
-> *(Upload your screenshot in the repository and replace the link below)*  
-> ```md
-> ![Screenshot](img.png)
-> ```
+## 📸 Project Screenshot
+![Screenshot](img.png)
 
 ---
 
